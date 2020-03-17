@@ -81,7 +81,7 @@ describe('app routes', () => {
       .then(res => {
         expect(res.body).toEqual({
           _id: expect.any(String),
-          name: recipe.name,
+          name: res.body.name,
           directions: [
             'preheat oven to 375',
             'mix ingredients',
@@ -139,7 +139,7 @@ describe('app routes', () => {
       .then(res => {
         expect(res.body).toEqual({
           _id: expect.any(String),
-          name: recipe.name,
+          name: res.body.name,
           directions: [
             'preheat oven to 375',
             'mix ingredients',
