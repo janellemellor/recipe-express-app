@@ -122,4 +122,34 @@ describe('app routes', () => {
         });
       });
   });
+
+  it('deletes a specific recipe', async() => {
+    const recipe = await Recipe.create(
+      { name: 'cookies', 
+        directions: [
+          'preheat oven to 375',
+          'mix ingredients',
+          'put dough on cookie sheet',
+          'bake for 10 minutes'
+        ], 
+      });
+
+    return request(app)
+      .get(`/api/v1/recipes/${recipe._id}`)
+      .then(res => {
+        expect(res.body).toEqual({
+          _id: expect.any(String),
+          name: recipe.name,
+          directions: [
+            'preheat oven to 375',
+            'mix ingredients',
+            'put dough on cookie sheet',
+            'bake for 10 minutes'
+          ],
+          __v: 0
+        });
+      });
+  });
+
+
 });
