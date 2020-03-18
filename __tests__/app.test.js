@@ -29,7 +29,12 @@ describe('app routes', () => {
           'mix ingredients',
           'put dough on cookie sheet',
           'bake for 10 minutes'
-        ]
+        ],
+        ingredients: [{
+          name: 'sugar',
+          amount: 2,
+          measurement: 'teaspoon'
+        }]
       })
       .then(res => {
         expect(res.body).toEqual({
@@ -41,6 +46,12 @@ describe('app routes', () => {
             'put dough on cookie sheet',
             'bake for 10 minutes'
           ],
+          ingredients: [{
+            _id: expect.any(String),
+            name: 'sugar',
+            amount: 2,
+            measurement: 'teaspoon'
+          }],
           __v: 0
         });
       });
