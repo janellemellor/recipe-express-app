@@ -85,6 +85,11 @@ describe('app routes', () => {
           'put dough on cookie sheet',
           'bake for 10 minutes'
         ], 
+        ingredients: [{
+          name: 'sugar',
+          amount: 2,
+          measurement: 'teaspoon'
+        }]
       });
 
     return request(app)
@@ -99,6 +104,12 @@ describe('app routes', () => {
             'put dough on cookie sheet',
             'bake for 10 minutes'
           ],
+          ingredients: [{
+            _id: expect.any(String),
+            name: 'sugar',
+            amount: 2,
+            measurement: 'teaspoon'
+          }],
           __v: 0
         });
       });
