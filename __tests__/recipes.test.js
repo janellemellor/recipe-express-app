@@ -174,7 +174,7 @@ describe('recipe routes', () => {
       });
   });
 
-  it('deletes a specific recipe', async() => {
+  it('deletes a specific recipe and all associated events', async() => {
     const recipe = await Recipe.create(
       { name: 'cookies', 
         directions: [
@@ -191,7 +191,7 @@ describe('recipe routes', () => {
       });
 
     return request(app)
-      .get(`/api/v1/recipes/${recipe._id}`)
+      .delete(`/api/v1/recipes/${recipe._id}`)
       .then(res => {
         expect(res.body).toEqual({
           _id: expect.any(String),
@@ -210,8 +210,11 @@ describe('recipe routes', () => {
           }],
           __v: 0
         });
+
+        return Event.find();
+      })
+      .then(events => {
+        expect(events).toHaveLength(0);
       });
   });
-
-
 });
