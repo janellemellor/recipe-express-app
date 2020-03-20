@@ -5,8 +5,9 @@ const app = require('../lib/app');
 const connect = require('../lib/utils/connect');
 const mongoose = require('mongoose');
 const Recipe = require('../lib/models/Recipe');
+const Event = require('../lib/models/Event');
 
-describe('app routes', () => {
+describe('recipe routes', () => {
   beforeAll(() => {
     connect();
   });
@@ -76,7 +77,7 @@ describe('app routes', () => {
       });
   });
 
-  it('gets a specific recipe', async() => {
+  it('gets a specific recipe and all events associated', async() => {
     const recipe = await Recipe.create(
       { name: 'cookies', 
         directions: [
@@ -92,9 +93,25 @@ describe('app routes', () => {
         }]
       });
 
+    await Event.create([
+      { recipeId: recipe.id,
+        dateOfEvent: Date.now(),
+        notes: 'best.cookie.ever',
+        rating: 5 },
+      { recipeId: recipe.id,
+        dateOfEvent: Date.now(),
+        notes: 'never make again',
+        rating: 1 },
+      { recipeId: recipe.id,
+        dateOfEvent: Date.now(),
+        notes: 'pretty ok cookie',
+        rating: 3 },
+    ]);
+
     return request(app)
       .get(`/api/v1/recipes/${recipe._id}`)
       .then(res => {
+        expect(res.body.events).toHaveLength(3);
         expect(res.body).toEqual({
           _id: expect.any(String),
           name: 'cookies',
@@ -110,6 +127,7 @@ describe('app routes', () => {
             amount: 2,
             measurement: 'teaspoon'
           }],
+          events: expect.any(Array),
           __v: 0
         });
       });
