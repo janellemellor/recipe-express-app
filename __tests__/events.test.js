@@ -185,46 +185,17 @@ describe('event routes', () => {
   });
 
   it('deletes a specific recipe and all associated events', async() => {
-    const recipe = await Recipe.create(
-      { name: 'cookies', 
-        directions: [
-          'preheat oven to 375',
-          'mix ingredients',
-          'put dough on cookie sheet',
-          'bake for 10 minutes'
-        ], 
-        ingredients: [{
-          name: 'sugar',
-          amount: 2,
-          measurement: 'teaspoon'
-        }]
-      });
-
     return request(app)
-      .delete(`/api/v1/recipes/${recipe._id}`)
+      .delete(`/api/v1/events/${event._id}`)
       .then(res => {
         expect(res.body).toEqual({
           _id: expect.any(String),
-          name: 'cookies',
-          directions: [
-            'preheat oven to 375',
-            'mix ingredients',
-            'put dough on cookie sheet',
-            'bake for 10 minutes'
-          ],
-          ingredients: [{
-            _id: expect.any(String),
-            name: 'sugar',
-            amount: 2,
-            measurement: 'teaspoon'
-          }],
+          recipeId: recipe._id.toString(),
+          dateOfEvent: expect.any(String),
+          notes: 'best.cookie.ever',
+          rating: 5,
           __v: 0
         });
-
-        return Event.find();
-      })
-      .then(events => {
-        expect(events).toHaveLength(0);
       });
   });
 });
