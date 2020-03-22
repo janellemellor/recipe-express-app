@@ -94,104 +94,39 @@ describe('event routes', () => {
       });
   });
 
-  it('gets a specific recipe and all events associated', async() => {
-    const recipe = await Recipe.create(
-      { name: 'cookies', 
-        directions: [
-          'preheat oven to 375',
-          'mix ingredients',
-          'put dough on cookie sheet',
-          'bake for 10 minutes'
-        ], 
-        ingredients: [{
-          name: 'sugar',
-          amount: 2,
-          measurement: 'teaspoon'
-        }]
-      });
-
-    await Event.create([
-      { recipeId: recipe.id,
-        dateOfEvent: Date.now(),
-        notes: 'best.cookie.ever',
-        rating: 5 },
-      { recipeId: recipe.id,
-        dateOfEvent: Date.now(),
-        notes: 'never make again',
-        rating: 1 },
-      { recipeId: recipe.id,
-        dateOfEvent: Date.now(),
-        notes: 'pretty ok cookie',
-        rating: 3 },
-    ]);
-
+  it('gets a specific event', async() => {
     return request(app)
-      .get(`/api/v1/recipes/${recipe._id}`)
+      .get(`/api/v1/events/${event._id}`)
       .then(res => {
-        expect(res.body.events).toHaveLength(3);
         expect(res.body).toEqual({
           _id: expect.any(String),
-          name: 'cookies',
-          directions: [
-            'preheat oven to 375',
-            'mix ingredients',
-            'put dough on cookie sheet',
-            'bake for 10 minutes'
-          ],
-          ingredients: [{
-            _id: expect.any(String),
-            name: 'sugar',
-            amount: 2,
-            measurement: 'teaspoon'
-          }],
-          events: expect.any(Array),
+          recipeId: JSON.parse(JSON.stringify(recipe)),
+          dateOfEvent: expect.any(String),
+          notes: 'best.cookie.ever',
+          rating: 5, 
           __v: 0
         });
       });
   });
 
 
-  it('updates a recipe by id', async() => {
-    const recipe = await Recipe.create({
-      name: 'cookies',
-      directions: [
-        'preheat oven to 375',
-        'mix ingredients',
-        'put dough on cookie sheet',
-        'bake for 10 minutes'
-      ],
-      ingredients: [{
-        name: 'sugar',
-        amount: 2,
-        measurement: 'teaspoon'
-      }]
-    });
-
+  it('updates an event by id', async() => {
     return request(app)
-      .patch(`/api/v1/recipes/${recipe._id}`)
-      .send({ name: 'good cookies' })
+      .patch(`/api/v1/events/${event._id}`)
+      .send({ rating: 6 })
       .then(res => {
         expect(res.body).toEqual({
           _id: expect.any(String),
-          name: 'good cookies',
-          directions: [
-            'preheat oven to 375',
-            'mix ingredients',
-            'put dough on cookie sheet',
-            'bake for 10 minutes'
-          ],
-          ingredients: [{
-            _id: expect.any(String),
-            name: 'sugar',
-            amount: 2,
-            measurement: 'teaspoon'
-          }],
+          recipeId: recipe._id.toString(),
+          dateOfEvent: expect.any(String),
+          notes: 'best.cookie.ever',
+          rating: 6, 
           __v: 0
         });
       });
   });
 
-  it('deletes a specific recipe and all associated events', async() => {
+  it('deletes a specific event', async() => {
     return request(app)
       .delete(`/api/v1/events/${event._id}`)
       .then(res => {
