@@ -68,21 +68,28 @@ describe('event routes', () => {
   });
 
   
-  it('gets all recipes', async() => {
-    const recipes = await Recipe.create([
-      { name: 'cookies', directions: [] },
-      { name: 'cake', directions: [] },
-      { name: 'pie', directions: [] }
+  it('gets all events', async() => {
+    const events = await Event.create([
+      { recipeId: recipe._id,
+        dateOfEvent: Date.now(),
+        notes: 'best.cookie.ever',
+        rating: 5 },
+      { recipeId: recipe._id,
+        dateOfEvent: Date.now(),
+        notes: 'never make again',
+        rating: 1 },
+      { recipeId: recipe._id,
+        dateOfEvent: Date.now(),
+        notes: 'pretty ok cookie',
+        rating: 3 },
     ]);
 
     return request(app)
-      .get('/api/v1/recipes')
+      .get('/api/v1/events')
       .then(res => {
-        recipes.forEach(recipe => {
-          expect(res.body).toContainEqual({
-            _id: recipe._id.toString(),
-            name: recipe.name
-          });
+        events.forEach(event => {
+          expect(res.body).toContainEqual(JSON.parse(JSON.stringify(event)
+          ));
         });
       });
   });
