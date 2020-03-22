@@ -34,12 +34,12 @@ describe('event routes', () => {
         }]
       });
   
-    event = await Event.create([
+    event = await Event.create(
       { recipeId: recipe._id,
         dateOfEvent: new Date(),
         notes: 'best.cookie.ever',
         rating: 5 }
-    ]);
+    );
   });
 
   afterAll(() => {
@@ -110,34 +110,34 @@ describe('event routes', () => {
   });
 
 
-  it('updates an event by id', async() => {
-    return request(app)
-      .patch(`/api/v1/events/${event._id}`)
-      .send({ rating: 6 })
-      .then(res => {
-        expect(res.body).toEqual({
-          _id: expect.any(String),
-          recipeId: recipe._id.toString(),
-          dateOfEvent: expect.any(String),
-          notes: 'best.cookie.ever',
-          rating: 6, 
-          __v: 0
-        });
-      });
-  });
+  // it('updates an event by id', async() => {
+  //   return request(app)
+  //     .patch(`/api/v1/events/${event._id}`)
+  //     .send({ rating: 6 })
+  //     .then(res => {
+  //       expect(res.body).toEqual({
+  //         _id: expect.any(String),
+  //         recipeId: recipe._id.toString(),
+  //         dateOfEvent: expect.any(String),
+  //         notes: 'best.cookie.ever',
+  //         rating: 6, 
+  //         __v: 0
+  //       });
+  //     });
+  // });
 
-  it('deletes a specific event', async() => {
-    return request(app)
-      .delete(`/api/v1/events/${event._id}`)
-      .then(res => {
-        expect(res.body).toEqual({
-          _id: expect.any(String),
-          recipeId: recipe._id.toString(),
-          dateOfEvent: expect.any(String),
-          notes: 'best.cookie.ever',
-          rating: 5,
-          __v: 0
-        });
-      });
-  });
+  // it('deletes a specific event', async() => {
+  //   return request(app)
+  //     .delete(`/api/v1/events/${event._id}`)
+  //     .then(res => {
+  //       expect(res.body).toEqual({
+  //         _id: expect.any(String),
+  //         recipeId: recipe._id.toString(),
+  //         dateOfEvent: expect.any(String),
+  //         notes: 'best.cookie.ever',
+  //         rating: 5,
+  //         __v: 0
+  //       });
+  //     });
+  // });
 });
